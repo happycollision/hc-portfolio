@@ -201,11 +201,9 @@ Class HCPortfolio{
 		$path_to_file = strstr($path_to_file, 'wp-content');
 		
 		//build the domain-based path
-		$url_build = wp_upload_dir();
-		$url_build = $url_build['baseurl'];
-		$url_build = substr($url_build, 0, strpos($url_build, 'wp-content'));
+		$url_build = get_site_url();
 		
-		return $url_build . $path_to_file;
+		return $url_build .'/'. $path_to_file;
 	}
 
 	private function hc_portfolio_prepare_file_paths(&$array_of_file_data){
