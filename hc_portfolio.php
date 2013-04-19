@@ -152,7 +152,9 @@ Class HCPortfolio{
 	private $have_html5 = false;
 	private $audio_data;
 	private $project_data;
-	private $display_array;
+	private $all_items_data;
+	private $single_link;
+	private $single_name;
 	
 	//Will contain arrays of ready to print HTML.
 	private $all_items_output = array();
@@ -162,11 +164,11 @@ Class HCPortfolio{
 	
 	function __construct($post_id){
 		if(self::$file_field_names == null) self::file_field_names();
-		$this->video_data = $this->get_video_values($post_id);
+		$this->video_data = $this->get_video_values($post_id); 
 		$this->audio_data = $this->get_audio_values($post_id);
 		$this->project_data = simple_fields_get_post_group_values($post_id, "Project Properties", true, 2);
 		
-		$this->display_array = array(
+		$this->all_items_data = array(
 			'videos' => $this->video_data
 			,'audio' => $this->audio_data
 		);
@@ -363,7 +365,7 @@ Class HCPortfolio{
 	}
 	
 	public function location(){
-		echo $this->project_data['Project Location'];
+		echo $this->project_data[0]['Project Location'];
 	}
 	
 	public function date($format=null){
@@ -387,7 +389,62 @@ Class HCPortfolio{
 		if(empty($this->all_items_output)) $this->populate_all_items();
 		return count($this->all_items_output);
 	}
+	
+	public function single_link(){
+		if(!empty($this->single_link)){
+			echo $this->single_link;
+			return;
+		}
+		if(empty($this->all_items_data)) return false;
+		$check_array = array(
+			'MP3 Audio',
+			'MP4 Video',
+			'WEBM Video',
+			'OGG/Theora Video',
+			'MOV or M4V Video',
+			'FLV Video'
+		);
+		
+		foreach($this->all_items_data as $category){
+			foreach($category as $item){
+				foreach($item as $field_name => $possible_url){
+					if(in_array($field_name, $check_array)){
+						$this->single_link = $possible_url;
+						echo $this->single_link;
+						return;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	public function single_name(){
+		if(!empty($this->single_name)) {
+			echo $this->single_name;
+			return;
+		}
+		if(empty($this->all_items_data)) return false;
+		$check_array = array(
+			'Video Name',
+			'Audio Name'
+		);
+		
+		foreach($this->all_items_data as $category){
+			foreach($category as $item){
+				foreach($item as $field_name => $possible_name){
+					if(in_array($field_name, $check_array)){
+						$this->single_name = $possible_name;
+						echo $this->single_name;
+						return;
+					}
+				}
+			}
+		}
+
+	}
 }
+require_once('hc_portfolio_post-type.php');
 require_once('simple_fields_call.php');
 
 endif;

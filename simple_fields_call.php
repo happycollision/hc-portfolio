@@ -241,8 +241,8 @@ simple_fields_register_post_connector('portfolio_connector',
 			)
 */
 		),
-		'post_types' => array('post'),
-		'hide_editor' => true
+		'post_types' => array('hc_portfolio'),
+		'hide_editor' => false
 	)
 );
 
@@ -252,4 +252,4 @@ simple_fields_register_post_connector('portfolio_connector',
  * @param $post_type_connector = connector id (int) or slug (string) or string __inherit__
  * 
  */
-simple_fields_register_post_type_default('portfolio_connector', 'post');
+simple_fields_register_post_type_default('portfolio_connector', 'hc_portfolio');
